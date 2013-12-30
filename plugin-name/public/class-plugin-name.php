@@ -58,12 +58,26 @@ class Plugin_Name {
 	protected static $instance = null;
 
 	/**
+	 * Constructor
+	 *
+	 * @since     1.0.0
+	 */
+	private function __construct() { }
+
+	/**
+	 * Clone
+	 *
+	 * @since     1.0.0
+	 */
+	private function __clone() { }
+
+	/**
 	 * Initialize the plugin by setting localization and loading public scripts
 	 * and styles.
 	 *
 	 * @since     1.0.0
 	 */
-	private function __construct() {
+	private function setup() {
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
@@ -104,8 +118,9 @@ class Plugin_Name {
 	public static function get_instance() {
 
 		// If the single instance hasn't been set, set it now.
-		if ( null == self::$instance ) {
+		if ( ! is_a( self::$instance, __CLASS__ ) ) {
 			self::$instance = new self;
+			self::$instance->setup();
 		}
 
 		return self::$instance;
